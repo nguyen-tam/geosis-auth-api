@@ -652,11 +652,7 @@
             }
           }
         ],
-        "security": [],
-        "externalDocs": {
-          "description": "Find out more about the authentication flow in the strapi documentation",
-          "url": "https://strapi.io/documentation/guides/authentication.html#providers"
-        }
+        "security": []
       }
     },
     "/auth/local": {
@@ -818,11 +814,7 @@
             }
           }
         },
-        "security": [],
-        "externalDocs": {
-          "description": "Find out more in the strapi's documentation",
-          "url": "https://strapi.io/documentation/guides/authentication.html#usage"
-        }
+        "security": []
       }
     },
     "/auth/{provider}/callback": {
@@ -886,11 +878,7 @@
               "type": "string"
             }
           }
-        ],
-        "externalDocs": {
-          "description": "Find out more in the strapi's documentation",
-          "url": "https://strapi.io/documentation/guides/authentication.html#providers"
-        }
+        ]
       }
     },
     "/auth/forgot-password": {
@@ -958,11 +946,7 @@
             }
           }
         },
-        "security": [],
-        "externalDocs": {
-          "description": "Find out more in the strapi's documentation",
-          "url": "https://strapi.io/documentation/guides/authentication.html#send-forgot-password-request"
-        }
+        "security": []
       }
     },
     "/auth/reset-password": {
