@@ -140,6 +140,43 @@ module.exports = {
     }
   },
 
+
+  changeOwnPassword: async (ctx) => {
+
+    console.log('da vao ham');
+    
+    const params = _.assign({}, ctx.request.body, ctx.params);
+
+    if (params.password && params.passwordConfirmation && params.password === params.passwordConfirmation ) {
+
+      
+
+      const user = ctx.state.user;
+      if (!user) {
+        return ctx.badRequest(null, ctx.request.admin ? [{ messages: [{ id: 'Auth.form.error.code.provide' }] }] : 'Incorrect code provided.');
+      }
+       
+      
+
+      user.password =  await strapi.plugins['users-permissions'].services.user.hashPassword(params);
+
+      // Remove relations data to update user password.
+      const data = _.omit(user, strapi.plugins['users-permissions'].models.user.associations.map(ast => ast.alias));
+
+      // Update the user.
+      await strapi.query('user', 'users-permissions').update(data);
+
+      ctx.send({
+        jwt: strapi.plugins['users-permissions'].services.jwt.issue(_.pick(user.toJSON ? user.toJSON() : user, ['_id', 'id'])),
+        user: _.omit(user.toJSON ? user.toJSON() : user, ['password', 'resetPasswordToken'])
+      });
+    } else if (params.password && params.passwordConfirmation && params.password !== params.passwordConfirmation) {
+      return ctx.badRequest(null, ctx.request.admin ? [{ messages: [{ id: 'Auth.form.error.password.matching' }] }] : 'Passwords do not match.');
+    } else {
+      return ctx.badRequest(null, ctx.request.admin ? [{ messages: [{ id: 'Auth.form.error.params.provide' }] }] : 'Incorrect params provided.');
+    }
+  },
+
   connect: async (ctx, next) => {
     const grantConfig = await strapi.store({
       environment: '',
