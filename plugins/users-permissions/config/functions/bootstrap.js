@@ -107,6 +107,60 @@ module.exports = async cb => {
     await pluginStore.set({key: 'grant', value: grantConfig});
   }
 
+  //SINGLE SIGN ON  ======================================================================================
+  //originAppName
+  if (!await pluginStore.get({key: 'originAppName'})) {
+    var value = {
+      "http://consumer.ankuranand.in:3020": "sso_consumer",
+      "http://consumertwo.ankuranand.in:3030": "simple_sso_consumer"
+    }
+    
+    await pluginStore.set({ key: 'originAppName', value});  
+  }
+
+  //alloweOrigin
+  if (!await pluginStore.get({key: 'alloweOrigin'})) {
+    var value = {
+      "http://consumer.ankuranand.in:3020": true,
+      "http://consumertwo.ankuranand.in:3030": true,
+      "http://sso.ankuranand.in:3080": false
+    }
+    
+    await pluginStore.set({ key: 'alloweOrigin', value});  
+  }
+  
+  //intrmTokenCache - 
+  if (!await pluginStore.get({key: 'intrmTokenCache'})) {
+    var value = {}
+    
+    await pluginStore.set({ key: 'intrmTokenCache', value});  
+  }
+
+  //appTokenDB
+  if (!await pluginStore.get({key: 'appTokenDB'})) {
+    var value = {
+      sso_consumer: "l1Q7zkOL59cRqWBkQ12ZiGVW2DBL",
+      simple_sso_consumer: "1g0jJwGmRQhJwvwNOrY4i90kD0m"
+    }
+    
+    await pluginStore.set({ key: 'appTokenDB', value});  
+  }
+  
+  //sessionUser
+  if (!await pluginStore.get({key: 'sessionUser'})) {
+    var value = {}
+    
+    await pluginStore.set({ key: 'sessionUser', value});  
+  }
+
+  //sessionApp
+  if (!await pluginStore.get({key: 'sessionApp'})) {
+    var value = {}
+    
+    await pluginStore.set({ key: 'sessionApp', value}); 
+  }
+  //======================================================================================================
+
   if (!await pluginStore.get({key: 'email'})) {
     const value = {
       'reset_password': {

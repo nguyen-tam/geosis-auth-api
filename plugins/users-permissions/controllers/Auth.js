@@ -79,10 +79,45 @@ module.exports = {
       if (!validPassword) {
         return ctx.badRequest(null, ctx.request.admin ? [{ messages: [{ id: 'Auth.form.error.invalid' }] }] : 'Identifier or password invalid.');
       } else {
+        // console.log(ctx);
+
+        //========================================Single Sign On=============================================================
+        //luu sessionUser
+        let sessionUser = await store.get({key: 'sessionUser'});
+        let value = {...sessionUser}; 
+        value[user.id] =  user.email; // {'5c887b6c3bf6621a7c138025': 'huynh.nguyen356@gmail.com'}
+        await store.set({ key: 'sessionUser', value});
+        
+        const ssoToken = strapi.plugins['users-permissions'].services.jwt.issue(_.pick(user.toJSON ? user.toJSON() : user, ['_id', 'id']));
+        const postLogInUser = await strapi.plugins['users-permissions'].services.jwt.verify(ssoToken);
+        
+        //luu user, Token, expireTime  vao session
+        const EXPIRE_TIME_TOTAL =  await strapi.plugins['users-permissions'].config.timeToExpire; //60 - set expire time = 60s
+        ctx.state.session.user = user;                                                            
+        ctx.state.session.token = ssoToken;
+        ctx.state.session.exp = postLogInUser.exp;                                                //thoi gian song cua user dang nhap
+        ctx.state.session.expireTime = parseInt(new Date().getTime() / 1000) + EXPIRE_TIME_TOTAL;        
+        //===========================================Single Sign On=========================================================
+
         ctx.send({
           jwt: strapi.plugins['users-permissions'].services.jwt.issue(_.pick(user.toJSON ? user.toJSON() : user, ['_id', 'id'])),
           user: _.omit(user.toJSON ? user.toJSON() : user, ['password', 'resetPasswordToken'])
         });
+
+        //==========================================Single Sign On===========================================================
+        //neu serviceURL khac null thi chuyen trang sang serviceURL
+        if(ctx.request.query && ctx.request.query.serviceURL != undefined){
+          let { serviceURL } = ctx.request.query;
+          
+          //Luu intrmTokenCache sau moi lan post login =={ D5K3QE1966IYp7qBZ7kofVMLGKQ: [ '5c887b6c3bf6621a7c138025', 'sso_consumer' ] }
+          const url = new URL(serviceURL);
+          await strapi.plugins['users-permissions'].services.sso.storeApplicationInCache(url.origin, user.id, ssoToken);
+
+          //chuyen trang sang serviecURL == http://consumer.ankuranand.in:3020?ssoToken=Abc.def.xyz
+          const urlLogIn = serviceURL + "?ssoToken=" + ssoToken;
+          ctx.redirect(urlLogIn);
+        }
+        //==========================================End Single Sign On=======================================================
       }
     } else {
       if (!_.get(await store.get({key: 'grant'}), [provider, 'enabled'])) {
@@ -107,6 +142,116 @@ module.exports = {
       });
     }
   },
+
+  //======================Single Sign On===================================================
+  logInSso: async (ctx) => {
+    //su dung store de lay du lieu
+    const pluginStore = strapi.store({
+      environment: '',
+      type: 'plugin',
+      name: 'users-permissions'
+    });
+    
+    const EXPIRE_TIME_TOTAL = await strapi.plugins['users-permissions'].config.timeToExpire; // timeToExpire = 60s
+
+    var infoUser = null;
+    //kiem tra neu expire time nho hon tg hien tai thi gan session user = null
+    if (parseInt(new Date().getTime() / 1000) > ctx.session.expireTime) {
+      ctx.state.session.user = null;
+      infoUser = null;
+    }
+    
+    //lay User info thong qua session
+    const { token, user, exp} = ctx.session;
+    if (parseInt(new Date().getTime() / 1000) < exp) {
+      infoUser = user ? user : null;        //neu expire time cua user con thi gan infoUser= user
+    }
+    
+    //lay du lieu tu store luu vao alloweOrigin 
+    let alloweOrigin = await pluginStore.get({key: 'alloweOrigin'});
+
+    //neu serviceURL = http://consumer.ankuranand.in:3020 != true thi thong bao loi
+    const { serviceURL } = ctx.query;
+    if (serviceURL != null) {
+      let url = new URL(serviceURL);
+      if (alloweOrigin[url.origin] !== true) {
+        return ctx.badRequest(null, ' "Your are not allowed to access the sso-server".');
+      }
+    }
+
+    //User ko ton tai Redirect sang login 
+    if(infoUser == null){
+      let url = new URL(serviceURL);
+      const urlLogIn = url.origin + "/login";
+      return ctx.redirect(`${urlLogIn}`);
+    }
+
+    if (infoUser != null && serviceURL != null) {
+      ctx.state.session.expireTime = parseInt(new Date().getTime() / 1000) + EXPIRE_TIME_TOTAL;
+      const url = new URL(serviceURL);
+      await strapi.plugins['users-permissions'].services.sso.storeApplicationInCache(url.origin, infoUser.id, token);
+      const urlService = url.origin + "?ssoToken=" + token;
+      return ctx.redirect(urlService);
+    }
+  },
+
+  verifySsoToken: async (ctx) => {
+    const pluginStore = strapi.store({
+      environment: '',
+      type: 'plugin',
+      name: 'users-permissions'
+    });
+    
+    //lay thong tin user thong qua sso token 
+    let infoUser = null;
+    let userSso = null;
+    const { ssoToken } = ctx.query;
+    if(ssoToken != undefined || ssoToken != null ){
+        userSso = await strapi.plugins['users-permissions'].services.jwt.verify(ssoToken);
+    }
+
+    //lay thong tin user bang ID
+    if(userSso != null || userSso != undefined){
+      infoUser = await strapi.query('user', 'users-permissions').findOne({id: userSso.id});
+    }
+
+    let intrmTokenCache = await pluginStore.get({key: 'intrmTokenCache'});
+    const appName = intrmTokenCache[ssoToken] != undefined ? intrmTokenCache[ssoToken][1] : '';
+    const globalSessionToken = intrmTokenCache[ssoToken] != undefined ? intrmTokenCache[ssoToken][0] : '';
+    
+    //neu user = null, ssoToken = null, intrmTokenCache chua ssoToken = null tra ve thong bao loi ko co quyen dang nhap
+    if (
+      infoUser == null || infoUser == undefined ||
+      ssoToken == null || ssoToken == undefined ||
+      intrmTokenCache[ssoToken] == null
+    ) {
+      return ctx.badRequest(null, 'Your are not allowed to access the sso-server');
+    }
+
+    //neu User == null hoac sessionApp ko chua user tra ve thong bao loi ko co quyen dang nhap
+    let sessionApp = await pluginStore.get({key: 'sessionApp'}); 
+    
+    if (infoUser == null || infoUser == undefined || sessionApp[globalSessionToken][appName] !== true) {
+      return ctx.response.forbidden('Unauthorized');
+    }
+    
+    if(infoUser != null){
+      //ma hoa user sang token
+      console.log("hello");
+      infoUser = {...infoUser, globalSessionID: globalSessionToken};
+      let payload =  await strapi.plugins['users-permissions'].services.sso.generatePayload(infoUser);
+      const ISSUER = "simple-sso";
+      const token_sso = await strapi.plugins['users-permissions'].services.jwt.issue(payload, {issuer: ISSUER, expiresIn: 10}); //token moi exp = 10s
+      
+      //xoa intrmTokenCahce sau khi da ma hoa user sang token
+      delete intrmTokenCache[ssoToken];
+      let value = {...intrmTokenCache}; 
+      await pluginStore.set({ key: 'intrmTokenCache', value});
+
+      return ctx.send({token: token_sso});
+    }
+  },
+  //=====================================End Single Sign On========================================================================
 
   changePassword: async (ctx) => {
     const params = _.assign({}, ctx.request.body, ctx.params);

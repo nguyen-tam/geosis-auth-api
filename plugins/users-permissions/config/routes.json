@@ -215,6 +215,34 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/auth/logInSso",
+      "handler": "Auth.logInSso",
+      "config": {
+        "policies": [],
+        "prefix": "",
+        "description": "Log in Sso",
+        "tag": {
+          "plugin": "users-permissions",
+          "name": "User"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/auth/verifySsoToken",
+      "handler": "Auth.verifySsoToken",
+      "config": {
+        "policies": [],
+        "prefix": "",
+        "description": "verifySsoToken in Sso",
+        "tag": {
+          "plugin": "users-permissions",
+          "name": "User"
+        }
+      }
+    },
+    {
       "method": "POST",
       "path": "/auth/local/register",
       "handler": "Auth.register",
