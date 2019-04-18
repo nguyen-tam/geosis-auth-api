@@ -9,6 +9,9 @@
 /* eslint-disable no-useless-escape */
 const crypto = require('crypto');
 const _ = require('lodash');
+const fs = require('fs');
+const cheerio = require('cheerio');
+const path = require('path');
 
 const emailRegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -80,44 +83,16 @@ module.exports = {
         return ctx.badRequest(null, ctx.request.admin ? [{ messages: [{ id: 'Auth.form.error.invalid' }] }] : 'Identifier or password invalid.');
       } else {
         // console.log(ctx);
-
-        //========================================Single Sign On=============================================================
-        //luu sessionUser
-        let sessionUser = await store.get({key: 'sessionUser'});
-        let value = {...sessionUser}; 
-        value[user.id] =  user.email; // {'5c887b6c3bf6621a7c138025': 'huynh.nguyen356@gmail.com'}
-        await store.set({ key: 'sessionUser', value});
         
-        const ssoToken = strapi.plugins['users-permissions'].services.jwt.issue(_.pick(user.toJSON ? user.toJSON() : user, ['_id', 'id']));
-        const postLogInUser = await strapi.plugins['users-permissions'].services.jwt.verify(ssoToken);
-        
-        //luu user, Token, expireTime  vao session
-        const EXPIRE_TIME_TOTAL =  await strapi.plugins['users-permissions'].config.timeToExpire; //60 - set expire time = 60s
-        ctx.state.session.user = user;                                                            
-        ctx.state.session.token = ssoToken;
-        ctx.state.session.exp = postLogInUser.exp;                                                //thoi gian song cua user dang nhap
-        ctx.state.session.expireTime = parseInt(new Date().getTime() / 1000) + EXPIRE_TIME_TOTAL;        
-        //===========================================Single Sign On=========================================================
+        //=========================Single sign on===================================================================
+        //service sso Post Login (trong file service users-permissions/services/sso.js)
+        await strapi.plugins['users-permissions'].services.sso.ssoPostLogin(ctx, user);
+        //=========================End Single Sign On===============================================================
 
         ctx.send({
           jwt: strapi.plugins['users-permissions'].services.jwt.issue(_.pick(user.toJSON ? user.toJSON() : user, ['_id', 'id'])),
           user: _.omit(user.toJSON ? user.toJSON() : user, ['password', 'resetPasswordToken'])
         });
-
-        //==========================================Single Sign On===========================================================
-        //neu serviceURL khac null thi chuyen trang sang serviceURL
-        if(ctx.request.query && ctx.request.query.serviceURL != undefined){
-          let { serviceURL } = ctx.request.query;
-          
-          //Luu intrmTokenCache sau moi lan post login =={ D5K3QE1966IYp7qBZ7kofVMLGKQ: [ '5c887b6c3bf6621a7c138025', 'sso_consumer' ] }
-          const url = new URL(serviceURL);
-          await strapi.plugins['users-permissions'].services.sso.storeApplicationInCache(url.origin, user.id, ssoToken);
-
-          //chuyen trang sang serviecURL == http://consumer.ankuranand.in:3020?ssoToken=Abc.def.xyz
-          const urlLogIn = serviceURL + "?ssoToken=" + ssoToken;
-          ctx.redirect(urlLogIn);
-        }
-        //==========================================End Single Sign On=======================================================
       }
     } else {
       if (!_.get(await store.get({key: 'grant'}), [provider, 'enabled'])) {
@@ -144,15 +119,20 @@ module.exports = {
   },
 
   //======================Single Sign On===================================================
-  logInSso: async (ctx) => {
+  logInSso: async (ctx, next) => {
     //su dung store de lay du lieu
     const pluginStore = strapi.store({
       environment: '',
       type: 'plugin',
       name: 'users-permissions'
     });
+
+    // let alloweOrigin = await pluginStore.get({key: 'alloweOrigin'});
     
-    const EXPIRE_TIME_TOTAL = await strapi.plugins['users-permissions'].config.timeToExpire; // timeToExpire = 60s
+    
+    const EXPIRE_TIME_TOTAL = await strapi.plugins['users-permissions'].config.timeToExpire; //thoi gian ton tai 60s
+
+    // console.log("Session User: ", ctx.session);
 
     var infoUser = null;
     //kiem tra neu expire time nho hon tg hien tai thi gan session user = null
@@ -160,7 +140,7 @@ module.exports = {
       ctx.state.session.user = null;
       infoUser = null;
     }
-    
+
     //lay User info thong qua session
     const { token, user, exp} = ctx.session;
     if (parseInt(new Date().getTime() / 1000) < exp) {
@@ -169,30 +149,125 @@ module.exports = {
     
     //lay du lieu tu store luu vao alloweOrigin 
     let alloweOrigin = await pluginStore.get({key: 'alloweOrigin'});
+    console.log("150 =========================== allowe Origin: ", alloweOrigin);
 
     //neu serviceURL = http://consumer.ankuranand.in:3020 != true thi thong bao loi
     const { serviceURL } = ctx.query;
     if (serviceURL != null) {
       let url = new URL(serviceURL);
-      if (alloweOrigin[url.origin] !== true) {
-        return ctx.badRequest(null, ' "Your are not allowed to access the sso-server".');
-      }
-    }
 
-    //User ko ton tai Redirect sang login 
-    if(infoUser == null){
-      let url = new URL(serviceURL);
-      const urlLogIn = url.origin + "/login";
-      return ctx.redirect(`${urlLogIn}`);
+      if (alloweOrigin[url.origin] !== true) {
+        return ctx.redirect(`/auth/login?error=4`);
+      }
     }
 
     if (infoUser != null && serviceURL != null) {
       ctx.state.session.expireTime = parseInt(new Date().getTime() / 1000) + EXPIRE_TIME_TOTAL;
+      
       const url = new URL(serviceURL);
       await strapi.plugins['users-permissions'].services.sso.storeApplicationInCache(url.origin, infoUser.id, token);
-      const urlService = url.origin + "?ssoToken=" + token;
+
+      let urlService = url.origin + url.pathname + url.search + "?ssoToken=" + token;
+      
+      let client = await pluginStore.get({key: 'client'});
+      if(client[url.origin] === 'geoset'){
+        urlService = url.origin + url.pathname + url.search + "&ssoToken=" + token;
+      }
+      
       return ctx.redirect(urlService);
     }
+
+    const { error } = ctx.query;
+    const layoutPath = path.join(strapi.config.appPath, 'plugins', 'users-permissions', 'public', 'login.html');
+
+    try {
+      const layout = fs.readFileSync(layoutPath, 'utf8');
+      const $ = cheerio.load(layout);
+
+      // $('form').attr('action', '/auth/login');
+      $('.error').text(_.isEmpty(error) ? '' : 'Wrong ...');
+
+      if(error == 1){
+        $('.error').text('Username is invalid');
+
+      } else if (error == 2){
+        $('.error').text('User is blocked');
+
+      } else if (error == 3){
+        $('.error').text('Username or Password is invalid');
+
+      } else if(error == 4){
+        $('.error').text('You are not allowed to access the sso-server');
+      }
+
+      try {
+        fs.writeFileSync(layoutPath, $.html());
+
+        ctx.url = path.basename(`${ctx.url}/login.html`);
+        return await strapi.koaMiddlewares.static(`./plugins/users-permissions/public`)(ctx, next);
+
+      } catch (e) {
+        console.log(e);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  postLoginSso: async (ctx) => {
+    const params = ctx.request.body;
+    const query = {};
+
+    if(ctx.request.query.serviceURL){
+      var serviceURL = ctx.request.query.serviceURL;
+    }
+
+    // Check if the provided identifier is an email or not.
+    const isEmail = emailRegExp.test(params.identifier);
+
+    // Set the identifier to the appropriate query field.
+    if (isEmail) {
+      query.email = params.identifier.toLowerCase();
+    } else {
+      query.username = params.identifier;
+    }
+
+    // Check if the user exists.
+    const user = await strapi.query('user', 'users-permissions').findOne(query, ['role']);
+    //User ko ton tai
+    if(!user){
+      if(serviceURL){
+        return ctx.redirect(`/auth/login?error=1&serviceURL=${serviceURL}`);
+      }
+      return ctx.redirect(`/auth/login?error=1`);
+    }
+
+    //User bi khoa
+    if (user.blocked === true) {
+      if(serviceURL){
+        return ctx.redirect(`/auth/login?error=2&serviceURL=${serviceURL}`);
+      }
+      return ctx.redirect(`/auth/login?error=2`);
+    }
+
+    //so sanh password nhap vao voi password tren CSDL
+    const validPassword = strapi.plugins['users-permissions'].services.user.validatePassword(params.password, user.password);
+
+    //sai password
+    if (!validPassword) {
+      if(serviceURL){
+        return ctx.redirect(`/auth/login?error=3&serviceURL=${serviceURL}`);
+      }
+      
+      return ctx.redirect(`/auth/login?error=3`);
+    } else { 
+      //service sso Post Login (trong file service users-permissions/services/sso.js)
+      const urllogin = await strapi.plugins['users-permissions'].services.sso.ssoPostLogin(ctx, user);
+      
+      return ctx.redirect(urllogin);
+    }
+
+    return ctx.redirect('/');
   },
 
   verifySsoToken: async (ctx) => {
@@ -237,11 +312,10 @@ module.exports = {
     
     if(infoUser != null){
       //ma hoa user sang token
-      console.log("hello");
       infoUser = {...infoUser, globalSessionID: globalSessionToken};
       let payload =  await strapi.plugins['users-permissions'].services.sso.generatePayload(infoUser);
       const ISSUER = "simple-sso";
-      const token_sso = await strapi.plugins['users-permissions'].services.jwt.issue(payload, {issuer: ISSUER, expiresIn: 10}); //token moi exp = 10s
+      const token_sso = await strapi.plugins['users-permissions'].services.jwt.issue(payload, {issuer: ISSUER, expiresIn: 10});
       
       //xoa intrmTokenCahce sau khi da ma hoa user sang token
       delete intrmTokenCache[ssoToken];
