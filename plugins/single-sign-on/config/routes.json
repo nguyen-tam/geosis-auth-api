@@ -1,0 +1,36 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "SingleSignOn.index",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "handler": "SingleSignOn.loginView",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "handler": "SingleSignOn.postLoginSso",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verifySsoToken",
+      "handler": "SingleSignOn.verifySsoToken",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

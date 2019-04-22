@@ -7,7 +7,7 @@ const pwd = shell.pwd();
 
 const silent = process.env.npm_config_debug !== 'true';
 const isDevelopmentMode = path.resolve(pwd.stdout).indexOf('strapi-admin') !== -1;
-const appPath = isDevelopmentMode ? path.resolve(process.env.PWD, '..') : path.resolve(pwd.stdout, '..');
+const appPath = isDevelopmentMode ? path.resolve(process.env.PWD || process.cwd(), '..') : path.resolve(pwd.stdout, '..');
 
 shell.echo('🏗  Building the admin...');
 
