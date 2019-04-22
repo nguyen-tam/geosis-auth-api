@@ -1,0 +1,17 @@
+{
+  "defaultConnection": "default",
+  "connections": {
+    "default": {
+      "connector": "strapi-hook-bookshelf",
+      "settings": {
+        "client": "mysql",
+        "host": "18.136.191.165",
+        "port": 3306,
+        "database": "geosis-auth-api",
+        "username": "root",
+        "password": "root"
+      },
+      "options": {}
+    }
+  }
+}
