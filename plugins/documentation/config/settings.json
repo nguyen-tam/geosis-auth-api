@@ -25,7 +25,7 @@
       "description": "Development server"
     },
     {
-      "url": "YOUR_STAGING_SERVER",
+      "url": "http://map.geosis.vn:7331",
       "description": "Staging server server"
     },
     {

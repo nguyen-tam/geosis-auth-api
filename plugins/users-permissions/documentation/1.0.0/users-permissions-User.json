@@ -1192,6 +1192,22 @@
                 }
               }
             }
+          },
+          "usersetting": {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "user": {
+                "type": "string"
+              },
+              "settings": {
+                "type": "json"
+              }
+            }
           }
         }
       },
@@ -1228,6 +1244,9 @@
             "default": false
           },
           "role": {
+            "type": "string"
+          },
+          "usersetting": {
             "type": "string"
           }
         }

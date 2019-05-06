@@ -1,0 +1,24 @@
+{
+  "connection": "default",
+  "collectionName": "usersettings",
+  "info": {
+    "name": "usersetting",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "user": {
+      "model": "user",
+      "via": "usersetting",
+      "plugin": "users-permissions"
+    },
+    "settings": {
+      "default": "",
+      "type": "json"
+    }
+  }
+}
