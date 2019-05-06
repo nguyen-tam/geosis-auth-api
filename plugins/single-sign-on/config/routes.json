@@ -1,0 +1,92 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "SingleSignOn.index",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/origin",
+      "handler": "SingleSignOn.origin",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/origin",
+      "handler": "SingleSignOn.createOrigin",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/origin",
+      "handler": "SingleSignOn.updateOrigin",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/origin/:id",
+      "handler": "SingleSignOn.deleteOrigin",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/app-name",
+      "handler": "SingleSignOn.appName",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/client",
+      "handler": "SingleSignOn.client",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/client",
+      "handler": "SingleSignOn.updateClient",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "handler": "SingleSignOn.loginView",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "handler": "SingleSignOn.postLoginSso",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verifySsoToken",
+      "handler": "SingleSignOn.verifySsoToken",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

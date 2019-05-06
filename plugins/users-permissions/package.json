@@ -1,27 +1,27 @@
 {
-  "_from": "strapi-plugin-users-permissions@3.0.0-alpha.21",
-  "_id": "strapi-plugin-users-permissions@3.0.0-alpha.21",
+  "_from": "strapi-plugin-users-permissions@3.0.0-alpha.26",
+  "_id": "strapi-plugin-users-permissions@3.0.0-alpha.26",
   "_inBundle": false,
-  "_integrity": "sha512-Txr4iKA6l9n+ofPyBHhElJD2NW+HeRQF4I/w/gv9g5gaO2F68K73qYRfEmJA0VJu86gbsr5p9ZmxXy36S/tJ4w==",
+  "_integrity": "sha512-k0v8bRs3nWF75By7j/1QyrvHoomBKRXYtVJt3h80lH4SmTc+3GDFfEYkoNWYXmOGPUSILXPvEr0rL5LA3taIJQ==",
   "_location": "/strapi-plugin-users-permissions",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "strapi-plugin-users-permissions@3.0.0-alpha.21",
+    "raw": "strapi-plugin-users-permissions@3.0.0-alpha.26",
     "name": "strapi-plugin-users-permissions",
     "escapedName": "strapi-plugin-users-permissions",
-    "rawSpec": "3.0.0-alpha.21",
+    "rawSpec": "3.0.0-alpha.26",
     "saveSpec": null,
-    "fetchSpec": "3.0.0-alpha.21"
+    "fetchSpec": "3.0.0-alpha.26"
   },
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "https://registry.npmjs.org/strapi-plugin-users-permissions/-/strapi-plugin-users-permissions-3.0.0-alpha.21.tgz",
-  "_shasum": "3cbe981bab1ddab226cac8449320aa6855fbc843",
-  "_spec": "strapi-plugin-users-permissions@3.0.0-alpha.21",
-  "_where": "G:\\gis\\geosis-auth-api",
+  "_resolved": "https://registry.npmjs.org/strapi-plugin-users-permissions/-/strapi-plugin-users-permissions-3.0.0-alpha.26.tgz",
+  "_shasum": "edcb78f117da4dce2aec8258d7cbc907897fc49a",
+  "_spec": "strapi-plugin-users-permissions@3.0.0-alpha.26",
+  "_where": "E:\\VKX\\geoset\\Clone-geosis-auth-api\\geosis-auth-api",
   "author": {
     "name": "Strapi team",
     "email": "hi@strapi.io",
@@ -39,13 +39,16 @@
     "koa2-ratelimit": "^0.6.1",
     "purest": "^2.0.1",
     "request": "^2.83.0",
-    "strapi-utils": "3.0.0-alpha.21",
+    "strapi-utils": "3.0.0-alpha.26",
     "uuid": "^3.1.0"
   },
   "deprecated": false,
   "description": "Protect your API with a full-authentication process based on JWT",
   "devDependencies": {
-    "strapi-helper-plugin": "3.0.0-alpha.21"
+    "rimraf": "^2.6.3",
+    "cross-env": "^5.0.5",
+    "webpack": "3.11.0",
+    "strapi-helper-plugin": "3.0.0-alpha.26"
   },
   "engines": {
     "node": ">= 10.0.0",
@@ -67,22 +70,22 @@
   },
   "scripts": {
     "analyze": "node ./node_modules/strapi-helper-plugin/lib/internals/scripts/analyze.js",
-    "analyze:clean": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/rimraf stats.json",
-    "build": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=production node node_modules/strapi-helper-plugin/node_modules/.bin/webpack --config node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
-    "build:clean": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/rimraf admin/build",
-    "build:dev": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=development node ./node_modules/strapi-helper-plugin/node_modules/.bin/webpack --config node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
+    "analyze:clean": "rimraf stats.json",
+    "build": "cross-env NODE_ENV=production webpack --config node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
+    "build:clean": "rimraf admin/build",
+    "build:dev": "cross-env NODE_ENV=development webpack --config node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
     "generate": "node ./node_modules/plop/plop.js --plopfile node_modules/strapi-helper-plugin/lib/internals/generators/index.js",
     "preanalyze": "npm run analyze:clean",
     "prebuild": "npm run build:clean",
     "prepublishOnly": "IS_MONOREPO=true npm run build",
     "prettier": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/prettier --single-quote --trailing-comma es5 --write \"{admin,__{tests,mocks}__}/**/*.js\"",
-    "start": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=development node ./node_modules/strapi-helper-plugin/lib/server",
-    "test": "echo \"Error: no test specified\""
+    "start": "cross-env NODE_ENV=development ./node_modules/strapi-helper-plugin/lib/server",
+    "test": "echo \"no tests yet\""
   },
   "strapi": {
     "name": "Roles & Permissions",
     "icon": "users",
     "description": "users-permissions.plugin.description"
   },
-  "version": "3.0.0-alpha.21"
+  "version": "3.0.0-alpha.26"
 }

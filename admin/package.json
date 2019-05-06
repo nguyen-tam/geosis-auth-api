@@ -1,27 +1,31 @@
 {
-  "_from": "strapi-admin@3.0.0-alpha.21",
-  "_id": "strapi-admin@3.0.0-alpha.21",
+  "_from": "strapi-admin@3.0.0-alpha.26",
+  "_id": "strapi-admin@3.0.0-alpha.26",
   "_inBundle": false,
-  "_integrity": "sha512-nqp+eakYdNCzi2pkwjRgMjahzGq67A6V3Te8CyGrKKBxFDTKk9/g8CsYtxyf+ocsvyH7ZU28TSmf2wppij/7NA==",
+  "_integrity": "sha512-yxtJAgf88iOGOvMMDCrWecyLMu3bPSVd1+F/XpGNH7DQp2haU7fk5M0B4stlRjE9coK82ONorSQg7biqZasnHw==",
   "_location": "/strapi/strapi-admin",
-  "_phantomChildren": {},
+  "_phantomChildren": {
+    "glob": "7.1.3",
+    "interpret": "1.2.0",
+    "rechoir": "0.6.2"
+  },
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "strapi-admin@3.0.0-alpha.21",
+    "raw": "strapi-admin@3.0.0-alpha.26",
     "name": "strapi-admin",
     "escapedName": "strapi-admin",
-    "rawSpec": "3.0.0-alpha.21",
+    "rawSpec": "3.0.0-alpha.26",
     "saveSpec": null,
-    "fetchSpec": "3.0.0-alpha.21"
+    "fetchSpec": "3.0.0-alpha.26"
   },
   "_requiredBy": [
     "/strapi/strapi-generate-admin"
   ],
-  "_resolved": "https://registry.npmjs.org/strapi-admin/-/strapi-admin-3.0.0-alpha.21.tgz",
-  "_shasum": "e1882541a7c99193307793e59ade378a8d525adc",
-  "_spec": "strapi-admin@3.0.0-alpha.21",
-  "_where": "C:\\Users\\HDN\\AppData\\Roaming\\npm\\node_modules\\strapi\\node_modules\\strapi-generate-admin",
+  "_resolved": "https://registry.npmjs.org/strapi-admin/-/strapi-admin-3.0.0-alpha.26.tgz",
+  "_shasum": "ab51d4cd7f0a32284eef68440e57c3bbbbb58246",
+  "_spec": "strapi-admin@3.0.0-alpha.26",
+  "_where": "C:\\Users\\ASUS\\AppData\\Roaming\\npm\\node_modules\\strapi\\node_modules\\strapi-generate-admin",
   "author": {
     "name": "Strapi"
   },
@@ -30,16 +34,22 @@
   },
   "bundleDependencies": false,
   "dependencies": {
+    "intl": "^1.2.5",
     "react-ga": "^2.4.1",
+    "redux": "^4.0.1",
     "remove-markdown": "^0.2.2",
-    "shelljs": "^0.7.8"
+    "shelljs": "^0.7.8",
+    "video-react": "^0.13.2"
   },
   "deprecated": false,
   "description": "Strapi Admin",
   "devDependencies": {
+    "cross-env": "^5.0.5",
+    "webpack": "3.11.0",
+    "rimraf": "^2.6.3",
     "sanitize.css": "^4.1.0",
-    "strapi-helper-plugin": "3.0.0-alpha.21",
-    "strapi-utils": "3.0.0-alpha.21"
+    "strapi-helper-plugin": "3.0.0-alpha.26",
+    "strapi-utils": "3.0.0-alpha.26"
   },
   "engines": {
     "node": ">= 10.0.0",
@@ -59,21 +69,21 @@
   },
   "scripts": {
     "analyze": "node ./node_modules/strapi-helper-plugin/lib/internals/scripts/analyze.js",
-    "analyze:clean": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/rimraf stats.json",
-    "build": "APP_PATH=$APP_PATH npm run build:dll && node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=production IS_ADMIN=true node ./node_modules/strapi-helper-plugin/node_modules/.bin/webpack --config ./node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
-    "build:clean": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/rimraf admin/build",
-    "build:dev": "npm run build:dll && node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=development IS_ADMIN=true node ./node_modules/strapi-helper-plugin/node_modules/.bin/webpack --config ./node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
-    "build:dll": "APP_PATH=$APP_PATH node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=production IS_ADMIN=true node ./node_modules/strapi-helper-plugin/node_modules/.bin/webpack --config ./node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.dll.babel.js --color -p --progress",
+    "analyze:clean": "rimraf stats.json",
+    "build": "npm run build:dll && cross-env NODE_ENV=production IS_ADMIN=true webpack --config ./node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
+    "build:clean": "cross-env rimraf admin/build",
+    "build:dev": "cross-env npm run build:dll && NODE_ENV=development IS_ADMIN=true webpack --config ./node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
+    "build:dll": "cross-env APP_PATH=$APP_PATH NODE_ENV=production IS_ADMIN=true webpack --config ./node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.dll.babel.js --color -p --progress",
     "generate": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/plop --plopfile ./node_modules/strapi-helper-plugin/lib/internals/generators/index.js",
     "preanalyze": "npm run analyze:clean",
-    "prebuild": "APP_PATH=$APP_PATH node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=production IS_ADMIN=true node ./node_modules/strapi-helper-plugin/lib/internals/scripts/loadAdminConfigurations.js",
+    "prebuild": "cross-env NODE_ENV=production IS_ADMIN=true node ./node_modules/strapi-helper-plugin/lib/internals/scripts/loadAdminConfigurations.js",
     "prepublishOnly": "IS_MONOREPO=true npm run build",
     "presetup": "node ./scripts/preSetup.js",
-    "prestart": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=development PORT=4000 IS_ADMIN=true node ./node_modules/strapi-helper-plugin/lib/internals/scripts/loadAdminConfigurations.js",
+    "prestart": "cross-env NODE_ENV=development PORT=4000 IS_ADMIN=true node ./node_modules/strapi-helper-plugin/lib/internals/scripts/loadAdminConfigurations.js",
     "prettier": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/prettier --single-quote --trailing-comma es5 --write \"{admin,__{tests,mocks}__}/**/*.js\"",
     "setup": "node ./scripts/setup.js",
-    "start": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=development PORT=4000 IS_ADMIN=true node ./node_modules/strapi-helper-plugin/lib/server",
-    "test": "echo \"Error: no test specified\""
+    "start": "cross-env NODE_ENV=development PORT=4000 IS_ADMIN=true nodemon ./node_modules/strapi-helper-plugin/lib/server",
+    "test": "echo \"no tests yet\""
   },
-  "version": "3.0.0-alpha.21"
+  "version": "3.0.0-alpha.26"
 }

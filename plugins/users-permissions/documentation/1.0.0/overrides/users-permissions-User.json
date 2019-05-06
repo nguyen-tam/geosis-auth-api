@@ -271,7 +271,11 @@
   "tags": [
     {
       "name": "Authentication",
-      "description": "All the routes related to the authentication"
+      "description": "All the routes related to the authentication",
+      "externalDocs": {
+        "description": "Find out more in strapi's documentation",
+        "url": "https://strapi.io/documentation/guides/authentication.html"
+      }
     },
     {
       "name": "Users-Permissions - User"

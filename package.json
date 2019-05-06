@@ -20,11 +20,12 @@
   },
   "dependencies": {
     "lodash": "^4.17.5",
-    "strapi": "3.0.0-alpha.21",
-    "strapi-hook-bookshelf": "3.0.0-alpha.21",
-    "strapi-hook-knex": "3.0.0-alpha.21",
+    "strapi": "3.0.0-alpha.26",
+    "strapi-utils": "3.0.0-alpha.26",
+    "strapi-hook-bookshelf": "3.0.0-alpha.26",
+    "strapi-hook-knex": "3.0.0-alpha.26",
     "knex": "latest",
-    "mysql": "2.16.0"
+    "mysql": "2.17.1"
   },
   "author": {
     "name": "A Strapi developer",
@@ -40,7 +41,7 @@
   ],
   "strapi": {
     "packageManager": "npm",
-    "uuid": "9d52544e-2536-42c8-83bc-2dbf07513805"
+    "uuid": "2c26e68a-3ae3-4d8c-9b8a-1eacb9a302df"
   },
   "engines": {
     "node": ">= 10.0.0",

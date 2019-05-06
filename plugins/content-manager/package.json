@@ -1,27 +1,27 @@
 {
-  "_from": "strapi-plugin-content-manager@3.0.0-alpha.21",
-  "_id": "strapi-plugin-content-manager@3.0.0-alpha.21",
+  "_from": "strapi-plugin-content-manager@3.0.0-alpha.26",
+  "_id": "strapi-plugin-content-manager@3.0.0-alpha.26",
   "_inBundle": false,
-  "_integrity": "sha512-HZDd/gQgPlmUQUJnw+6o1EqNodfmOI0o5tKopxd94UBhUXS+hGWKYxPfHho39L24Gh23u1wy+e1/fdn2jsV6kw==",
+  "_integrity": "sha512-FjWRaEzJgNKBw8o//Zm2JlQUU21iUCV7sCiSlXdkiPKUL+JfCRcCq1N5PV7Lx/687kpx1rKf/xIPjpu+oYhu9Q==",
   "_location": "/strapi-plugin-content-manager",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "strapi-plugin-content-manager@3.0.0-alpha.21",
+    "raw": "strapi-plugin-content-manager@3.0.0-alpha.26",
     "name": "strapi-plugin-content-manager",
     "escapedName": "strapi-plugin-content-manager",
-    "rawSpec": "3.0.0-alpha.21",
+    "rawSpec": "3.0.0-alpha.26",
     "saveSpec": null,
-    "fetchSpec": "3.0.0-alpha.21"
+    "fetchSpec": "3.0.0-alpha.26"
   },
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "https://registry.npmjs.org/strapi-plugin-content-manager/-/strapi-plugin-content-manager-3.0.0-alpha.21.tgz",
-  "_shasum": "f2f8cd9dc691cbb6e60c3b6a5696e48a056d83a0",
-  "_spec": "strapi-plugin-content-manager@3.0.0-alpha.21",
-  "_where": "G:\\gis\\geosis-auth-api",
+  "_resolved": "https://registry.npmjs.org/strapi-plugin-content-manager/-/strapi-plugin-content-manager-3.0.0-alpha.26.tgz",
+  "_shasum": "714fa7f6da433c078f85e32d121abb870eacd05a",
+  "_spec": "strapi-plugin-content-manager@3.0.0-alpha.26",
+  "_where": "E:\\VKX\\geoset\\Clone-geosis-auth-api\\geosis-auth-api",
   "author": {
     "name": "Strapi team",
     "email": "hi@strapi.io",
@@ -32,16 +32,20 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-    "pluralize": "^7.0.0"
+    "pluralize": "^7.0.0",
+    "strapi-utils": "3.0.0-alpha.26"
   },
   "deprecated": false,
   "description": "A powerful UI to easily manage your data.",
   "devDependencies": {
+    "rimraf": "^2.6.3",
     "codemirror": "^5.39.0",
+    "cross-env": "^5.0.5",
+    "webpack": "3.11.0",
     "draft-js": "^0.10.5",
     "react-select": "^1.2.1",
     "showdown": "^1.8.6",
-    "strapi-helper-plugin": "3.0.0-alpha.21"
+    "strapi-helper-plugin": "3.0.0-alpha.26"
   },
   "engines": {
     "node": ">= 10.0.0",
@@ -63,22 +67,22 @@
   },
   "scripts": {
     "analyze": "node ./node_modules/strapi-helper-plugin/lib/internals/scripts/analyze.js",
-    "analyze:clean": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/rimraf stats.json",
-    "build": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=production node ./node_modules/strapi-helper-plugin/node_modules/.bin/webpack --config node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
-    "build:clean": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/rimraf admin/build",
-    "build:dev": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=development node ./node_modules/strapi-helper-plugin/node_modules/.bin/webpack --config node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
-    "generate": "node ./node_modules/plop/plop.js --plopfile ./node_modules/strapi-helper-plugin/lib/internals/generators/index.js",
+    "analyze:clean": "rimraf stats.json",
+    "build": "cross-env NODE_ENV=production webpack --config node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
+    "build:clean": "cross-env rimraf admin/build",
+    "build:dev": "cross-env NODE_ENV=development webpack --config node_modules/strapi-helper-plugin/lib/internals/webpack/webpack.prod.babel.js --color -p --progress",
+    "generate": "node ./node_modules/strapi-helper-plugin/node_modules/plop --plopfile ./node_modules/strapi-helper-plugin/lib/internals/generators/index.js",
     "preanalyze": "npm run analyze:clean",
     "prebuild": "npm run build:clean",
     "prepublishOnly": "IS_MONOREPO=true npm run build",
     "prettier": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/prettier --single-quote --trailing-comma es5 --write \"{admin,__{tests,mocks}__}/**/*.js\"",
-    "start": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/cross-env NODE_ENV=development PLUGIN=true node ./node_modules/strapi-helper-plugin/lib/server",
-    "test": "echo \"Error: no test specified\""
+    "start": "cross-env NODE_ENV=development PLUGIN=true node ./node_modules/strapi-helper-plugin/lib/server",
+    "test": "echo \"no tests yet\""
   },
   "strapi": {
     "name": "Content Manager",
     "icon": "plug",
     "description": "content-manager.plugin.description"
   },
-  "version": "3.0.0-alpha.21"
+  "version": "3.0.0-alpha.26"
 }

@@ -42,6 +42,7 @@ module.exports = {
         const buffer = Buffer.concat(buffers);
 
         return {
+          tmpPath: stream.path,
           name: stream.name,
           sha256: niceHash(buffer),
           hash: uuid().replace(/-/g, ''),
@@ -83,7 +84,11 @@ module.exports = {
 
         file.provider = provider.provider;
 
-        return await strapi.plugins['upload'].services.upload.add(file);
+        const res = await strapi.plugins['upload'].services.upload.add(file);
+
+        // Remove temp file
+        fs.unlinkSync(file.tmpPath);
+        return res;
       }),
     );
   },
@@ -120,15 +125,16 @@ module.exports = {
   },
 
   fetch: params => {
+    params.id = params._id || params.id;
     return strapi
       .query('file', 'upload')
-      .findOne(_.pick(params, ['_id', 'id']));
+      .findOne(_.pick(params, ['id']));
   },
 
   fetchAll: params => {
     return strapi
       .query('file', 'upload')
-      .find(strapi.utils.models.convertParams('file', params));
+      .find(params);
   },
 
   count: async () => {

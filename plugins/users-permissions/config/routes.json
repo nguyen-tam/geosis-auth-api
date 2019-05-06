@@ -264,21 +264,6 @@
       "config": {
         "policies": ["plugins.users-permissions.ratelimit"],
         "prefix": "",
-        "description": "Reset a user's password",
-        "tag": {
-          "plugin": "users-permissions",
-          "name": "User"
-        }
-      }
-    },
-
-    {
-      "method": "POST",
-      "path": "/auth/change-password",
-      "handler": "Auth.changeOwnPassword",
-      "config": {
-        "policies": ["plugins.users-permissions.ratelimit"],
-        "prefix": "",
         "description": "Change a user's password",
         "tag": {
           "plugin": "users-permissions",
@@ -286,7 +271,6 @@
         }
       }
     },
-
     {
       "method": "GET",
       "path": "/auth/email-confirmation",
