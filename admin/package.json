@@ -82,7 +82,7 @@
     "prestart": "cross-env NODE_ENV=development PORT=4000 IS_ADMIN=true node ./node_modules/strapi-helper-plugin/lib/internals/scripts/loadAdminConfigurations.js",
     "prettier": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/prettier --single-quote --trailing-comma es5 --write \"{admin,__{tests,mocks}__}/**/*.js\"",
     "setup": "node ./scripts/setup.js",
-    "start": "cross-env NODE_ENV=development PORT=4000 IS_ADMIN=true node ./node_modules/strapi-helper-plugin/lib/server",
+    "start": "cross-env NODE_ENV=development PORT=4000 IS_ADMIN=true nodemon ./node_modules/strapi-helper-plugin/lib/server",
     "test": "echo \"no tests yet\""
   },
   "version": "3.0.0-alpha.26"

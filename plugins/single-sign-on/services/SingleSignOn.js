@@ -56,10 +56,9 @@ module.exports = {
 
             //chuyen trang sang serviecURL == http://consumer.ankuranand.in:3020?ssoToken=Abc.def.xyz
             let urlLogIn = serviceURL + "?ssoToken=" + ssoToken;
-            if(client[url.origin] === 'geoset'){
+            if(client[url.origin] === true){
                 urlLogIn = serviceURL + "&ssoToken=" + ssoToken;
             }
-            
             return urlLogIn;
         }
 

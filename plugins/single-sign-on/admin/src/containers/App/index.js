@@ -17,6 +17,7 @@ import pluginId from 'pluginId';
 
 // Containers
 import HomePage from 'containers/HomePage';
+import EditPage from 'containers/EditPage';
 import NotFoundPage from 'containers/NotFoundPage';
 // When you're done studying the ExamplePage container, remove the following line and delete the ExamplePage container
 import ExamplePage from 'containers/ExamplePage';
@@ -26,16 +27,23 @@ import reducer from './reducer';
 class App extends React.Component {
   // When you're done studying the ExamplePage container, remove the following lines and delete the ExamplePage container
   componentDidMount() {
-    this.props.history.push(`/plugins/${pluginId}/example`);
+    if (!this.props.location.pathname.split('/')[3]) {
+      this.props.history.push('/plugins/single-sign-on/origin');
+    }
+  }
+  
+  componentDidUpdate() {
+    if (!this.props.location.pathname.split('/')[3]) {
+      this.props.history.push('/plugins/single-sign-on/origin');
+    }
   }
 
   render() {
     return (
       <div className={pluginId}>
         <Switch>
-          <Route path={`/plugins/${pluginId}`} component={HomePage} exact />
-          {/* When you're done studying the ExamplePage container, remove the following line and delete the ExamplePage container  */}
-          <Route path={`/plugins/${pluginId}/example`} component={ExamplePage} exact />
+          <Route path={`/plugins/${pluginId}/:settingType/:actionType/:id?`} component={EditPage} exact />
+          <Route path={`/plugins/${pluginId}/:settingType`} component={HomePage} exact />
           <Route component={NotFoundPage} />
         </Switch>
       </div>
@@ -45,11 +53,13 @@ class App extends React.Component {
 
 App.contextTypes = {
   plugins: PropTypes.object,
+  router: PropTypes.object.isRequired,
   updatePlugin: PropTypes.func,
 };
 
 App.propTypes = {
   history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export function mapDispatchToProps(dispatch) {

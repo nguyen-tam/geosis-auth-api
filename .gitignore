@@ -102,3 +102,9 @@ node_modules
 
 testApp
 coverage
+admin/admin/build
+plugins/content-type-builder/admin/build
+plugins/content-type-builder/admin/build/*.png
+plugins/content-type-builder/admin/build/*.svg
+plugins/content-manager/admin/build/*.svg
+plugins/content-manager/admin/build/*.png

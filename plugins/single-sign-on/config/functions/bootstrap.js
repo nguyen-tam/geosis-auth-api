@@ -10,34 +10,23 @@ module.exports = async cb => {
     //SINGLE SIGN ON  ======================================================================================
   //originAppName
   if (!await pluginStore.get({key: 'originAppName'})) {
-    var value = {
-      "http://consumer.ankuranand.in:3020": "sso_consumer",
-      "http://consumertwo.ankuranand.in:3030": "simple_sso_consumer",
-      "http://localhost:3000": "sso_consumer",
-      "http://172.16.1.188" : "sso_consumer"
-    }
+    var originAppName = {}
     
-    await pluginStore.set({ key: 'originAppName', value});  
+    await pluginStore.set({ key: 'originAppName', value: originAppName});  
   }
 
   //alloweOrigin
   if (!await pluginStore.get({key: 'alloweOrigin'})) {
-    var value = {
-      "http://consumer.ankuranand.in:3020": true,
-      "http://consumertwo.ankuranand.in:3030": true,
-      "http://localhost:3000": true,
-      "http://sso.ankuranand.in:3080": false,
-      "http://172.16.1.188" : true
-    }
+    var alloweOrigin = {}
     
-    await pluginStore.set({ key: 'alloweOrigin', value});  
+    await pluginStore.set({ key: 'alloweOrigin', value: alloweOrigin});  
   }
   
   //intrmTokenCache - 
   if (!await pluginStore.get({key: 'intrmTokenCache'})) {
     var intrmTokenCache = {}
     
-    await pluginStore.set({ key: 'intrmTokenCache', intrmTokenCache});  
+    await pluginStore.set({ key: 'intrmTokenCache', value: intrmTokenCache});  
   }
 
   //appTokenDB
@@ -47,29 +36,26 @@ module.exports = async cb => {
       simple_sso_consumer: "1g0jJwGmRQhJwvwNOrY4i90kD0m"
     }
     
-    await pluginStore.set({ key: 'appTokenDB', appTokenDB});  
+    await pluginStore.set({ key: 'appTokenDB', value: appTokenDB});  
   }
   
   //sessionUser
   if (!await pluginStore.get({key: 'sessionUser'})) {
     var sessionUser = {}
     
-    await pluginStore.set({ key: 'sessionUser', sessionUser});  
+    await pluginStore.set({ key: 'sessionUser', value: sessionUser});  
   }
 
   //sessionApp
   if (!await pluginStore.get({key: 'sessionApp'})) {
     var sessionApp = {}
     
-    await pluginStore.set({ key: 'sessionApp', sessionApp}); 
+    await pluginStore.set({ key: 'sessionApp', value: sessionApp}); 
   }
-
+  
   if (!await pluginStore.get({key: 'client'})) {
-    var client = {
-      "http://localhost:3000": "geoset",
-    }
-    
-    await pluginStore.set({ key: 'client', client}); 
+    var client = {}
+    await pluginStore.set({ key: 'client', value: client}); 
   }
   //======================================================================================================
 

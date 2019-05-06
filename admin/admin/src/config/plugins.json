@@ -32,6 +32,14 @@
     }
   },
   {
+    "id": "single-sign-on",
+    "source": {
+      "development": "/single-sign-on/main.js",
+      "production": "/single-sign-on/main.js",
+      "staging": "/single-sign-on/main.js"
+    }
+  },
+  {
     "id": "upload",
     "source": {
       "development": "/upload/main.js",

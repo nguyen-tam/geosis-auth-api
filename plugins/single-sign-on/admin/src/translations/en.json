@@ -1,1 +1,13 @@
-{}
+{
+    "PopUpForm.header.edit.origin": "Edit {origin}",
+    "PopUpForm.header.edit.client": "Edit {client}",
+    "PopUpForm.Origin.enabled.description": "Edit the Single sign on client",
+    "PopUpForm.Origin.enabled.lable" : "Enable",
+    "EditPage.header.title.create" : "Create A new URL SSO",
+    "EditPage.header.description.create" : " ",
+    "EditPage.form.origin" : "Url SSO details",
+    "EditPage.form.description.toggle" : "enable Url SSO",
+    "EditPage.form.label.toggle" : "Enable",
+    "EditPage.form.label.url" : "Url Name",
+    "EditPage.form.origin.name.error": "This value is required." 
+}
