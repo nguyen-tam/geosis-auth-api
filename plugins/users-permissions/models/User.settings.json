@@ -48,10 +48,6 @@
       "via": "users",
       "plugin": "users-permissions",
       "configurable": false
-    },
-    "usersetting": {
-      "model": "usersetting",
-      "via": "user"
     }
   },
   "collectionName": "users-permissions_user"

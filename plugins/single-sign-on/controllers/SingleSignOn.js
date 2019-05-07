@@ -422,7 +422,7 @@ module.exports = {
       infoUser = {...infoUser, globalSessionID: globalSessionToken};
       let payload =  await strapi.plugins['single-sign-on'].services.singlesignon.generatePayload(infoUser);
       const ISSUER = "simple-sso";
-      const token_sso = await strapi.plugins['users-permissions'].services.jwt.issue(payload, {issuer: ISSUER, expiresIn: '3m'});
+      const token_sso = await strapi.plugins['users-permissions'].services.jwt.issue(payload, {issuer: ISSUER, expiresIn: '30d'});
       
       //xoa intrmTokenCahce sau khi da ma hoa user sang token
       delete intrmTokenCache[ssoToken];

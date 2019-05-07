@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/strapi-plugin-users-permissions/-/strapi-plugin-users-permissions-3.0.0-alpha.26.tgz",
   "_shasum": "edcb78f117da4dce2aec8258d7cbc907897fc49a",
   "_spec": "strapi-plugin-users-permissions@3.0.0-alpha.26",
-  "_where": "E:\\VKX\\geoset\\Clone-geosis-auth-api\\geosis-auth-api",
+  "_where": "E:\\strapi-26\\geosis-auth-api-mysql",
   "author": {
     "name": "Strapi team",
     "email": "hi@strapi.io",
@@ -45,9 +45,9 @@
   "deprecated": false,
   "description": "Protect your API with a full-authentication process based on JWT",
   "devDependencies": {
-    "rimraf": "^2.6.3",
     "cross-env": "^5.0.5",
     "webpack": "3.11.0",
+    "rimraf": "^2.6.3",
     "strapi-helper-plugin": "3.0.0-alpha.26"
   },
   "engines": {

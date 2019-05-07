@@ -104,7 +104,7 @@ module.exports = {
   getRoles: async (ctx) => {
     try {
       const roles = await strapi.plugins['users-permissions'].services.userspermissions.getRoles();
-      console.log("107================get roles users permissions: ", roles);
+
       ctx.send({ roles });
     } catch(err) {
       ctx.badRequest(null, [{ messages: [{ id: 'Not found' }] }]);
@@ -131,9 +131,8 @@ module.exports = {
   },
 
   init: async (ctx) => {
-    console.log("135===========Role: ");
     const role = await strapi.query('role', 'users-permissions').findOne({ type: 'root' }, ['users']);
-    console.log("135===========Role: ", role);
+
     ctx.send({ hasAdmin: !_.isEmpty(role.users) });
   },
 

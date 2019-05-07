@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/strapi-plugin-email/-/strapi-plugin-email-3.0.0-alpha.26.tgz",
   "_shasum": "2c59c10b0f12f18fd36533b39261f158752b0e56",
   "_spec": "strapi-plugin-email@3.0.0-alpha.26",
-  "_where": "E:\\VKX\\geoset\\Clone-geosis-auth-api\\geosis-auth-api",
+  "_where": "E:\\strapi-26\\geosis-auth-api-mysql",
   "author": {
     "name": "Strapi team",
     "email": "hi@strapi.io",
@@ -38,10 +38,10 @@
   "deprecated": false,
   "description": "This is the description of the plugin.",
   "devDependencies": {
-    "react-copy-to-clipboard": "5.0.1",
-    "rimraf": "^2.6.3",
     "cross-env": "^5.0.5",
     "webpack": "3.11.0",
+    "rimraf": "^2.6.3",
+    "react-copy-to-clipboard": "5.0.1",
     "strapi-helper-plugin": "3.0.0-alpha.26"
   },
   "engines": {

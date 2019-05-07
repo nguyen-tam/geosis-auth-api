@@ -6,12 +6,10 @@
       "settings": {
         "client": "mysql",
         "host": "18.136.191.165",
-        "srv": false,
         "port": 3306,
         "database": "geosis-auth-api",
         "username": "root",
-        "password": "6j!7u7k%Kp*8bSE",
-        "ssl": false
+        "password": "6j!7u7k%Kp*8bSE"
       },
       "options": {}
     }

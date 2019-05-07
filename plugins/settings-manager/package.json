@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/strapi-plugin-settings-manager/-/strapi-plugin-settings-manager-3.0.0-alpha.26.tgz",
   "_shasum": "df0f885ea926c71fef65c94dcc1607d074b46eb7",
   "_spec": "strapi-plugin-settings-manager@3.0.0-alpha.26",
-  "_where": "E:\\VKX\\geoset\\Clone-geosis-auth-api\\geosis-auth-api",
+  "_where": "E:\\strapi-26\\geosis-auth-api-mysql",
   "author": {
     "name": "Strapi team",
     "email": "hi@strapi.io",
@@ -37,10 +37,10 @@
   "deprecated": false,
   "description": "Strapi plugin to manage settings.",
   "devDependencies": {
-    "cross-env": "^5.2.0",
+    "cross-env": "^5.0.5",
     "webpack": "3.11.0",
-    "flag-icon-css": "^2.8.0",
     "rimraf": "^2.6.3",
+    "flag-icon-css": "^2.8.0",
     "strapi-helper-plugin": "3.0.0-alpha.26"
   },
   "engines": {

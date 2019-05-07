@@ -1,5 +1,5 @@
 {
-  "name": "geosis-auth-api",
+  "name": "geosis-auth-api-mysql",
   "private": true,
   "version": "0.1.0",
   "description": "A Strapi application.",
@@ -41,7 +41,7 @@
   ],
   "strapi": {
     "packageManager": "npm",
-    "uuid": "2c26e68a-3ae3-4d8c-9b8a-1eacb9a302df"
+    "uuid": "99f7b7c0-e7a7-43c7-b119-e65cf902443e"
   },
   "engines": {
     "node": ">= 10.0.0",
