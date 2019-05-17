@@ -16,6 +16,8 @@ module.exports = {
   callback: async (ctx) => {
     const provider = ctx.params.provider || 'local';
     const params = ctx.request.body;
+    console.log('19============================provider: ', provider);
+    console.log('120============================params: ', params);
 
     const store = await strapi.store({
       environment: '',

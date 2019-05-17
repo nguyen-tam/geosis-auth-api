@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/strapi-plugin-content-manager/-/strapi-plugin-content-manager-3.0.0-alpha.26.tgz",
   "_shasum": "714fa7f6da433c078f85e32d121abb870eacd05a",
   "_spec": "strapi-plugin-content-manager@3.0.0-alpha.26",
-  "_where": "E:\\VKX\\geoset\\Clone-geosis-auth-api\\geosis-auth-api",
+  "_where": "E:\\strapi-26\\geosis-auth-api-mysql",
   "author": {
     "name": "Strapi team",
     "email": "hi@strapi.io",
@@ -39,9 +39,9 @@
   "description": "A powerful UI to easily manage your data.",
   "devDependencies": {
     "rimraf": "^2.6.3",
-    "codemirror": "^5.39.0",
     "cross-env": "^5.0.5",
     "webpack": "3.11.0",
+    "codemirror": "^5.39.0",
     "draft-js": "^0.10.5",
     "react-select": "^1.2.1",
     "showdown": "^1.8.6",

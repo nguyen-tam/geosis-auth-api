@@ -422,7 +422,7 @@ module.exports = {
       infoUser = {...infoUser, globalSessionID: globalSessionToken};
       let payload =  await strapi.plugins['single-sign-on'].services.singlesignon.generatePayload(infoUser);
       const ISSUER = "simple-sso";
-      const token_sso = await strapi.plugins['users-permissions'].services.jwt.issue(payload, {issuer: ISSUER, expiresIn: '3m'});
+      const token_sso = await strapi.plugins['users-permissions'].services.jwt.issue(payload, {issuer: ISSUER, expiresIn: '30d'});
       
       //xoa intrmTokenCahce sau khi da ma hoa user sang token
       delete intrmTokenCache[ssoToken];
@@ -431,5 +431,24 @@ module.exports = {
 
       return ctx.send({token: token_sso});
     }
+  },
+
+  getLogin: async (ctx) =>{
+
+    const { provider } = ctx.query;
+    
+    let user, error;
+    try {
+      [user, error] = await strapi.plugins['single-sign-on'].services.providers.connect(provider, ctx.query);
+    }  catch([user, error]){
+      console.log('=============================================================================442');
+      console.log(error);
+    }
+    
+    ctx.send({
+      jwt: strapi.plugins['users-permissions'].services.jwt.issue(_.pick(user, ['_id', 'id'])),
+      user: _.omit(user.toJSON ? user.toJSON() : user, ['password', 'resetPasswordToken'])
+    });
+
   }
 };

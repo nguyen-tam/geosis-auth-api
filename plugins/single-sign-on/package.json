@@ -23,7 +23,9 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.3"
+    "cheerio": "^1.0.0-rc.3",
+    "purest": "^2.0.1",
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "rimraf": "^2.6.3",

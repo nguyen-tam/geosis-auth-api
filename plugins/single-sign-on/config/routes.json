@@ -87,6 +87,14 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "GET",
+      "path": "/getLogin",
+      "handler": "SingleSignOn.getLogin",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

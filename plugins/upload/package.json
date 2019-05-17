@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/strapi-plugin-upload/-/strapi-plugin-upload-3.0.0-alpha.26.tgz",
   "_shasum": "15fab2722f976d7e1e0119c5362be93b22d58077",
   "_spec": "strapi-plugin-upload@3.0.0-alpha.26",
-  "_where": "E:\\VKX\\geoset\\Clone-geosis-auth-api\\geosis-auth-api",
+  "_where": "E:\\strapi-26\\geosis-auth-api-mysql",
   "author": {
     "name": "A Strapi developer"
   },
