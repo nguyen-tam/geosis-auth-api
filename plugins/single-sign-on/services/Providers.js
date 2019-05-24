@@ -33,6 +33,10 @@ exports.connect = (provider, query) => {
      
     // Get the profile.
     getProfile(provider, query, async (err, profile) => {
+      if(err){                                              //=============them moi
+        return reject([null, err]);
+      } 
+
       try {
         const users = await strapi.query('user', 'users-permissions').find({
           email: profile.email
@@ -59,6 +63,8 @@ exports.connect = (provider, query) => {
           provider: provider,
           role: defaultRole._id || defaultRole.id
         });
+
+        console.log(params);
 
         const createdUser = await strapi.query('user', 'users-permissions').create(params);
 
@@ -87,12 +93,14 @@ const getProfile = async (provider, query, callback) => {
         });
 
         facebook.query().get('me?fields=name,email').auth(access_token).request((err, res, body) => {
+            console.log("================ 94 body: ", body)
             if (err) {
+              console.log('====================== 95: facebook: ', err)
             callback(err);
             } else {
             callback(null, {
                 username: body.name,
-                email: body.email
+                email: body.email==undefined? body.id: body.email
             });
             }
         });
@@ -105,6 +113,7 @@ const getProfile = async (provider, query, callback) => {
 
       google.query('plus').get('people/me').auth(access_token).request((err, res, body) => {
         if (err) {
+          console.log('108====================Service Providers GetProfile: ', err);
           callback(err);
         } else {
           callback(null, {

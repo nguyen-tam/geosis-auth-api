@@ -443,8 +443,9 @@ module.exports = {
     }  catch([user, error]){
       console.log('=============================================================================442');
       console.log(error);
+      return ctx.send({code: error.error.code, message: error.error.message}); //them cho nay
     }
-    
+
     ctx.send({
       jwt: strapi.plugins['users-permissions'].services.jwt.issue(_.pick(user, ['_id', 'id'])),
       user: _.omit(user.toJSON ? user.toJSON() : user, ['password', 'resetPasswordToken'])
