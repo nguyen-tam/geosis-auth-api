@@ -1,5 +1,13 @@
 [
   {
+    "id": "chat-realtime",
+    "source": {
+      "development": "/chat-realtime/main.js",
+      "production": "/chat-realtime/main.js",
+      "staging": "/chat-realtime/main.js"
+    }
+  },
+  {
     "id": "content-manager",
     "source": {
       "development": "/content-manager/main.js",
@@ -13,6 +21,14 @@
       "development": "/content-type-builder/main.js",
       "production": "/content-type-builder/main.js",
       "staging": "/content-type-builder/main.js"
+    }
+  },
+  {
+    "id": "documentation",
+    "source": {
+      "development": "/documentation/main.js",
+      "production": "/documentation/main.js",
+      "staging": "/documentation/main.js"
     }
   },
   {
