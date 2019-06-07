@@ -16,8 +16,6 @@ module.exports = {
   callback: async (ctx) => {
     const provider = ctx.params.provider || 'local';
     const params = ctx.request.body;
-    console.log('19============================provider: ', provider);
-    console.log('120============================params: ', params);
 
     const store = await strapi.store({
       environment: '',
@@ -113,8 +111,31 @@ module.exports = {
   changePassword: async (ctx) => {
     const params = _.assign({}, ctx.request.body, ctx.params);
 
-    if (params.password && params.passwordConfirmation && params.password === params.passwordConfirmation && params.code) {
-      const user = await strapi.query('user', 'users-permissions').findOne({ resetPasswordToken: params.code });
+    //==================================================Edit code here==============================================================
+    let user = null;
+    let payload = null;
+    if(params.code) {
+        user = await strapi.query('user', 'users-permissions').findOne({ resetPasswordToken: params.code });
+    } else if(params.jwt) {
+        try {
+            payload = await strapi.plugins['users-permissions'].services.jwt.verify(params.jwt);
+        } catch(err){
+          console.log(err.message);
+          return ctx.badRequest(null, err.message);
+        }
+        
+        if(payload.exp - payload.iat <= 0){
+          return ctx.badRequest(null, 'Jwt expired.');
+        }
+        
+        user = await strapi.query('user', 'users-permissions').findOne({ id: payload.id }); //for mysql
+    }
+
+    const filter = params.code || payload.id;
+    //==============================================================================================================================
+    
+    if (params.password && params.passwordConfirmation && params.password === params.passwordConfirmation && filter) {
+      // const user = await strapi.query('user', 'users-permissions').findOne({ resetPasswordToken: params.code });
 
       if (!user) {
         return ctx.badRequest(null, ctx.request.admin ? [{ messages: [{ id: 'Auth.form.error.code.provide' }] }] : 'Incorrect code provided.');
@@ -275,6 +296,17 @@ module.exports = {
 
     params.role = role._id || role.id;
     params.password = await strapi.plugins['users-permissions'].services.user.hashPassword(params);
+
+    //=========================Edit here ====================================================================================================
+    //check username already taken?
+    const username = await strapi.query('user', 'users-permissions').findOne({
+      username: params.username
+    });
+
+    if (username && username.provider === params.provider) {
+      return ctx.badRequest(null, ctx.request.admin ? [{ messages: [{ id: 'Auth.form.error.email.taken' }] }] : 'username is already taken.');
+    }
+    //============================End edit ==================================================================================================
 
     const user = await strapi.query('user', 'users-permissions').findOne({
       email: params.email

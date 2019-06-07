@@ -320,7 +320,7 @@ module.exports = {
   postLoginSso: async (ctx) => {
     const params = ctx.request.body;
     const query = {};
-
+    console.log(params);
     if(ctx.request.query.serviceURL){
       var serviceURL = ctx.request.query.serviceURL;
     }
